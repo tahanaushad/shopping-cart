@@ -65,7 +65,7 @@ function addToCart(product) {
                 cart[i].count = cart[i].count + 1;
                 isProductinCart = true;
                 break;
-            } 
+            }
         }
         if (!isProductinCart) {
             product.count = 1;
@@ -77,25 +77,65 @@ function addToCart(product) {
     }
 
     renderCartListing()
-    
+
 }
 
-function renderCartListing () {
+function renderCartListing() {
     const cartBillElm = document.getElementById("cartBill");
     cartBillElm.innerHTML = "";
-    for(i = 0; i < cart.length; i++){
+    for (let i = 0; i < cart.length; i++) {
         const cartDiv = document.createElement("div")
-        cartDiv.innerHTML = `${cart[i].title} - ${cart[i].count}`
+        cartDiv.innerHTML = `${cart[i].title} - <button id=add-${cart[i].id}>+</button> ${cart[i].count} <button id=remove-${cart[i].id}>-</button>`;
+
         cartBillElm.appendChild(cartDiv);
+        document.getElementById(`add-${cart[i].id}`).addEventListener("click", function () {
+            addProduct(cart[i])
+        })
+
+        document.getElementById(`remove-${cart[i].id}`).addEventListener("click", function() {
+            removeProduct(cart[i])
+        })
+
     }
+
+}
+
+
+function addProduct(cartObject) {
+    if (cartObject.count < 10) {
+
+    cartObject.count = cartObject.count+1
+    renderCartListing()
+}
+else {
+    alert("You can not add more than 10 same items")
+}
+}
+
+function removeProduct(cartObject) {
+if (cartObject.count > 1) {
+    cartObject.count = cartObject.count-1
+    renderCartListing()
+}
+else{
+    for ( let i = 0; i < cart.length; i++){
+        if(cartObject.id == cart[i].id) {
+
+            cart.splice(i, 1)
+        }
+    }
+    renderCartListing()
     
 }
+}
+
+
 
 
 function emptyCart() {
 
-cart = [];
-renderCartListing ();
+    cart = [];
+    renderCartListing();
 }
 
 
